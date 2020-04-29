@@ -2,9 +2,13 @@
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:catel="http://schemas.catelproject.com"
+              xmlns:local="clr-namespace:HelloMVVM"
               ResizeMode="CanResize">
+    <Window.Resources>
+        <local:NameConverter x:Key="nameConverter"></local:NameConverter>
+    </Window.Resources>
 
-     <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -30,10 +34,21 @@
             </TextBlock>
         </Label>
         <TextBlock Grid.Row="2" FontSize="20" Text="{Binding FirstName}"/>
-        <TextBox  Grid.Row="3" FontSize="20" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="2" FontSize="20">
+            <TextBlock.Text>
+                <MultiBinding Converter="{StaticResource nameConverter}" UpdateSourceTrigger="PropertyChanged">
+                    <Binding Path="FirstName" />
+                    <Binding Path="LastName" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        <UniformGrid Grid.Row="3" Columns="2">
+            <TextBox FontSize="20"  Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"/>
+            <TextBox  FontSize="20"  Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"/>
+        </UniformGrid>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <Button Content="ClickMe!" Command="{Binding ShowFirstName}" Margin="10" Padding="5"/>
-            <CheckBox Content="Check Me!" Margin="10"/>
+            <CheckBox Content="Check Me!" Margin="10" IsChecked="{Binding IsCheked}"/>
         </StackPanel>
     </Grid>
     
